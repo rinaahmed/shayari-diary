@@ -385,7 +385,6 @@ body {
   color: var(--plum-800);
   direction: rtl;
   text-align: right;
-  white-space: pre-line;
   margin-bottom: 12px;
 }
 .card-more {
