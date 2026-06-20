@@ -647,32 +647,26 @@ function renderInsights() {
   const ghazalCount = state.entries.filter(e => e.type === 'ghazal').length;
   const mehfilCount = state.entries.filter(e => e.type === 'saved').length;
 
-  // Compute date bounds up-front — used by both chart and closing section
-  const dates = state.entries.map(e => new Date(e.dateAdded)).filter(d => !isNaN(d));
-  const firstDate  = dates.length ? new Date(Math.min(...dates)) : null;
-  const newestDate = dates.length ? new Date(Math.max(...dates)) : null;
-
-  // Monthly histogram — 12 months ending at the newest entry date
-  // (anchored to data, not today, so seed/imported entries always appear)
-  const MONTHS_ABBR = ['J','F','M','A','M','J','J','A','S','O','N','D'];
-  const CHART_H = 68; // max bar height in pixels
+  // "Writing since" — only user's own compositions (sher/ghazal), not saved Mehfil poems
   const now = new Date();
-  const refDate = newestDate && newestDate > now ? newestDate : (newestDate || now);
+  const ownDates = state.entries
+    .filter(e => e.type === 'sher' || e.type === 'ghazal')
+    .map(e => new Date(e.dateAdded)).filter(d => !isNaN(d));
+  const firstOwnDate = ownDates.length ? new Date(Math.min(...ownDates)) : null;
+
+  // Monthly histogram — current calendar year Jan–Dec
+  const MONTHS_ABBR = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+  const CHART_H = 68;
+  const year = now.getFullYear();
 
   const monthlyCounts = Array(12).fill(0);
   state.entries.forEach(e => {
     const d = new Date(e.dateAdded);
-    const monthsAgo = (refDate.getFullYear() - d.getFullYear()) * 12
-                    + (refDate.getMonth()    - d.getMonth());
-    if (monthsAgo >= 0 && monthsAgo < 12) {
-      monthlyCounts[11 - monthsAgo]++;
+    if (d.getFullYear() === year) {
+      monthlyCounts[d.getMonth()]++;
     }
   });
-  const monthLabels = [];
-  for (let i = 11; i >= 0; i--) {
-    const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1);
-    monthLabels.push(MONTHS_ABBR[d.getMonth()]);
-  }
+  const monthLabels = MONTHS_ABBR.slice();
   const maxCount = Math.max(...monthlyCounts, 1);
   const chartBarsHtml = monthlyCounts.map((c, i) => {
     const h = c === 0 ? 3 : Math.max(6, Math.round((c / maxCount) * CHART_H));
@@ -702,9 +696,9 @@ function renderInsights() {
         </div>`).join('')
     : '<p style="font-size:.82rem;color:var(--muted);padding:4px 0">No themes yet.</p>';
 
-  // Favourite line — most recently added sher or saved
+  // Favourite line — most recently added sher (user's own only)
   const favEntry = state.entries
-    .filter(e => e.type === 'sher' || e.type === 'saved')
+    .filter(e => e.type === 'sher')
     .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))[0];
   const favLine = favEntry
     ? (favEntry.urdu || '').split('\n').filter(Boolean)[0] || ''
@@ -741,7 +735,7 @@ function renderInsights() {
         <div class="insights-closing-diamond"></div>
       </div>
       ${favLine ? `<p class="insights-fav-line">${esc(favLine)}</p>` : ''}
-      ${firstDate ? `<p class="insights-since">Writing since ${fmtDateLong(firstDate.toISOString())}</p>` : ''}
+      ${firstOwnDate ? `<p class="insights-since">Writing since ${fmtDateLong(firstOwnDate.toISOString())}</p>` : ''}
     </div>`;
 }
 
