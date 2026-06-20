@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#2D1050">
+  <meta name="theme-color" content="#8A3F2C">
   <meta name="description" content="A personal shayari diary — کنول کے پھول">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="کنول کے پھول">
-  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon-180.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png">
   <link rel="manifest" href="./manifest.json">
   <title>کنول کے پھول — Shayari Diary</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Nastaliq+Urdu:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -23,12 +24,23 @@
 
     <header class="app-header">
       <div class="app-header-inner">
-        <div>
+        <div class="app-mark">
+          <div class="app-mark-outer"></div>
+          <div class="app-mark-inner"></div>
+        </div>
+        <div class="app-header-titles">
           <h1 class="app-title">کنول کے پھول</h1>
           <p class="app-tagline">Shayari Diary</p>
         </div>
+        <button class="btn-header-icon" id="insightsBtn" aria-label="Insights" title="Insights">
+          <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <rect x="2" y="12" width="3" height="6" rx="1"/>
+            <rect x="8.5" y="7" width="3" height="11" rx="1"/>
+            <rect x="15" y="3" width="3" height="15" rx="1"/>
+          </svg>
+        </button>
         <button class="btn-header-icon" id="settingsBtn" aria-label="Settings" title="Settings">
-          <svg viewBox="0 0 20 20" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
             <circle cx="10" cy="10" r="2.5"/>
             <path d="M10 2v1.6m0 12.8V18m-8-8h1.6m12.8 0H18M4.3 4.3l1.1 1.1m9.2 9.2 1.1 1.1M4.3 15.7l1.1-1.1m9.2-9.2 1.1-1.1"/>
           </svg>
@@ -47,7 +59,7 @@
 
     <div class="search-section">
       <div class="search-bar">
-        <svg class="search-icon" viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <svg class="search-icon" viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
           <circle cx="8.5" cy="8.5" r="5.5"/>
           <path d="M17 17l-4-4"/>
         </svg>
@@ -66,25 +78,37 @@
   <!-- ============ FORM VIEW ============ -->
   <div id="view-form" class="view">
     <header class="sub-header">
-      <button class="back-btn" id="formBackBtn">
-        <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <button class="back-btn" id="formCancelBtn">
+        <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="12 16 6 10 12 4"/>
         </svg>
-        Back
+        Cancel
       </button>
-      <h2 id="formTitle">New Entry</h2>
+      <span class="sub-header-title" id="formTitle">New Sher</span>
+      <button class="save-btn-pill" id="saveBtn" type="button">Save</button>
     </header>
 
     <div class="form-container">
       <form id="entryForm" novalidate>
 
         <div class="form-group">
-          <label class="form-label">Type</label>
-          <div class="type-selector">
+          <div class="type-selector" id="typeSelector">
             <button type="button" class="type-btn active" data-type="sher">Sher</button>
-            <button type="button" class="type-btn" data-type="ghazal">Ghazal in Progress</button>
-            <button type="button" class="type-btn" data-type="saved">Mehfil (Others)</button>
+            <button type="button" class="type-btn" data-type="ghazal">Ghazal</button>
+            <button type="button" class="type-btn" data-type="saved">Mehfil</button>
           </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">The Verse</label>
+          <textarea id="fieldUrdu" class="form-textarea urdu-input"
+                    placeholder="یہاں لکھیں…" rows="6" dir="rtl" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="fieldTranslit" class="form-label">Transliteration <span class="optional">(optional)</span></label>
+          <input type="text" id="fieldTranslit" class="form-input transliteration-input"
+                 placeholder="yahan likhiye…" autocomplete="off">
         </div>
 
         <div class="form-group">
@@ -93,29 +117,18 @@
         </div>
 
         <div class="form-group">
-          <label for="fieldUrdu" class="form-label">Urdu Text</label>
-          <textarea id="fieldUrdu" class="form-textarea urdu-input"
-                    placeholder="یہاں لکھیں…" rows="6" dir="rtl" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="fieldEnglish" class="form-label">English Translation <span class="optional">(optional)</span></label>
-          <textarea id="fieldEnglish" class="form-textarea" placeholder="Translation or meaning…" rows="3"></textarea>
-        </div>
-
-        <div class="form-group">
           <label for="fieldAuthor" class="form-label">Author</label>
           <input type="text" id="fieldAuthor" class="form-input" placeholder="Kunwal" value="Kunwal" autocomplete="off">
         </div>
 
         <div class="form-group">
-          <label for="fieldTags" class="form-label">Tags <span class="optional">(comma separated)</span></label>
+          <label for="fieldTags" class="form-label">Themes <span class="optional">(comma separated)</span></label>
           <input type="text" id="fieldTags" class="form-input" placeholder="love, longing, spring…" autocomplete="off">
           <div id="tagSuggestions" class="tag-suggestions"></div>
         </div>
 
         <div class="form-group">
-          <label for="fieldNotes" class="form-label">Personal Notes <span class="optional">(optional)</span></label>
+          <label for="fieldNotes" class="form-label">Notes <span class="optional">(optional)</span></label>
           <textarea id="fieldNotes" class="form-textarea" placeholder="Context, inspiration, variations…" rows="3"></textarea>
         </div>
 
@@ -202,8 +215,6 @@
 
         </div><!-- /ghazalSection -->
 
-        <button type="submit" class="btn-primary" id="saveBtn">Save Entry</button>
-
       </form>
     </div>
   </div>
@@ -212,25 +223,25 @@
   <div id="view-detail" class="view">
     <header class="sub-header">
       <button class="back-btn" id="detailBackBtn">
-        <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="12 16 6 10 12 4"/>
         </svg>
         Back
       </button>
       <div class="detail-actions">
         <button class="btn-action" id="shareBtn" aria-label="Copy to clipboard" title="Copy">
-          <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <rect x="7" y="7" width="10" height="10" rx="1.5"/>
             <path d="M4 13H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v1"/>
           </svg>
         </button>
         <button class="btn-action" id="editBtn" aria-label="Edit" title="Edit">
-          <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.5 2.5a2.121 2.121 0 0 1 3 3L6 17l-4 1 1-4L14.5 2.5z"/>
           </svg>
         </button>
         <button class="btn-action danger" id="deleteBtn" aria-label="Delete" title="Delete">
-          <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 5h14m-11 0V3h8v2M5 5v13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5M8 9v5m4-5v5"/>
           </svg>
         </button>
@@ -239,36 +250,176 @@
     <div id="detailContent" class="detail-content scroll-body"></div>
   </div>
 
-  <!-- ============ SETTINGS VIEW ============ -->
-  <div id="view-settings" class="view">
+  <!-- ============ INSIGHTS VIEW ============ -->
+  <div id="view-insights" class="view">
     <header class="sub-header">
-      <button class="back-btn" id="settingsBackBtn">
-        <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <button class="back-btn" id="insightsBackBtn">
+        <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="12 16 6 10 12 4"/>
         </svg>
         Back
       </button>
-      <h2>Settings</h2>
+      <span class="sub-header-title">
+        Insights
+        <span class="sub-header-title-urdu">تجزیہ</span>
+      </span>
+    </header>
+    <div id="insightsContent" class="insights-content scroll-body"></div>
+  </div>
+
+  <!-- ============ SETTINGS VIEW ============ -->
+  <div id="view-settings" class="view">
+    <header class="sub-header">
+      <button class="back-btn" id="settingsBackBtn">
+        <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="12 16 6 10 12 4"/>
+        </svg>
+        Back
+      </button>
+      <span class="sub-header-title">Settings</span>
     </header>
     <div class="settings-content">
-      <div class="settings-section">
-        <h3>Backup &amp; Restore</h3>
-        <button class="btn-secondary" id="exportBtn">Export All Data (JSON)</button>
-        <label class="btn-secondary import-label">
-          Import Data (JSON) — merges, never overwrites
+
+      <!-- Group 1: Reading & Writing -->
+      <div class="settings-group">
+        <!-- Nastaliq slider row -->
+        <div class="slider-row">
+          <div class="slider-row-head">
+            <span class="settings-row-label">Urdu text size</span>
+            <div class="slider-size-labels">
+              <span class="slider-size-small">ا</span>
+              <input type="range" id="nastaliqSlider" class="nastaliq-slider"
+                     min="80" max="130" value="100" step="5">
+              <span class="slider-size-large">ا</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-row">
+          <div class="settings-row-icon">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M4 6h12M4 10h8M4 14h6"/>
+            </svg>
+          </div>
+          <div class="settings-row-body">
+            <span class="settings-row-label">Show transliteration</span>
+            <span class="settings-row-sub">Display Roman Urdu in reading view</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggleTranslit" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-knob"></div>
+          </label>
+        </div>
+
+        <div class="settings-row">
+          <div class="settings-row-icon">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zm0 4v4l3 3"/>
+            </svg>
+          </div>
+          <div class="settings-row-body">
+            <span class="settings-row-label">Daily writing reminder</span>
+            <span class="settings-row-sub">9:00 PM · the hour of poets</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggleReminder" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-knob"></div>
+          </label>
+        </div>
+
+        <div class="settings-row">
+          <div class="settings-row-icon">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <rect x="3" y="8" width="14" height="11" rx="2"/>
+              <path d="M7 8V6a3 3 0 1 1 6 0v2"/>
+            </svg>
+          </div>
+          <div class="settings-row-body">
+            <span class="settings-row-label">App lock</span>
+            <span class="settings-row-sub">Face ID / biometric</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggleAppLock">
+            <div class="toggle-track"></div>
+            <div class="toggle-knob"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Group 2: Data -->
+      <div class="settings-group">
+        <div class="settings-row" id="exportBtn">
+          <div class="settings-row-icon">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M10 13V3m-4 6 4 4 4-4M3 17h14"/>
+            </svg>
+          </div>
+          <div class="settings-row-body">
+            <span class="settings-row-label">Export diary</span>
+            <span class="settings-row-sub">Save a JSON backup to your device</span>
+          </div>
+          <svg class="settings-row-arrow" viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <polyline points="8 4 14 10 8 16"/>
+          </svg>
+        </div>
+
+        <label class="settings-row import-label">
+          <div class="settings-row-icon">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M10 7v10m-4-4 4 4 4-4M3 3h14"/>
+            </svg>
+          </div>
+          <div class="settings-row-body">
+            <span class="settings-row-label">Import diary</span>
+            <span class="settings-row-sub">Merge from JSON — never overwrites</span>
+          </div>
+          <svg class="settings-row-arrow" viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <polyline points="8 4 14 10 8 16"/>
+          </svg>
           <input type="file" id="importFile" accept=".json" style="display:none">
         </label>
       </div>
-      <div class="settings-section">
-        <h3>Danger Zone</h3>
-        <button class="btn-danger" id="clearDataBtn">Clear All Data</button>
+
+      <!-- Group 3: Danger -->
+      <div class="settings-group">
+        <div class="settings-row" id="clearDataBtn" style="color:#8B1818">
+          <div class="settings-row-icon" style="color:#8B1818; background:rgba(139,24,24,.07)">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M3 5h14m-11 0V3h8v2M5 5v13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5"/>
+            </svg>
+          </div>
+          <div class="settings-row-body">
+            <span class="settings-row-label" style="color:#8B1818">Clear all data</span>
+            <span class="settings-row-sub">Permanently delete all entries</span>
+          </div>
+        </div>
       </div>
-      <div class="settings-section">
-        <h3>About</h3>
-        <p class="settings-about-urdu">کنول کے پھول</p>
-        <p>A private shayari diary. No accounts, no tracking, no cloud.</p>
-        <p class="muted">Your data lives in this browser's localStorage. Export regularly to keep backups.</p>
-      </div>
+
+      <p class="settings-footer">Kunwal ke Phool · v2.1</p>
+    </div>
+  </div>
+
+  <!-- ============ WRITING MODE VIEW ============ -->
+  <div id="view-writing" class="view">
+    <div class="writing-bar">
+      <button class="writing-done-btn" id="writingDoneBtn">Done</button>
+      <div class="writing-diamond"></div>
+      <button class="writing-aa-btn" id="writingAaBtn">Aa</button>
+    </div>
+    <div class="writing-textarea-wrap">
+      <textarea id="writingTextarea" class="writing-textarea"
+                placeholder="لکھیں…" dir="rtl"></textarea>
+    </div>
+    <div class="writing-divider">
+      <div class="writing-divider-rule"></div>
+      <div class="writing-divider-diamond"></div>
+      <div class="writing-divider-rule"></div>
+    </div>
+    <div class="writing-footer">
+      <span class="writing-counts" id="writingCounts">0 misra · 0 words</span>
+      <span class="writing-time" id="writingTime">the hour of poets</span>
     </div>
   </div>
 

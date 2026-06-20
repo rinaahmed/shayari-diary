@@ -1,25 +1,17 @@
 {
   "name": "Kunwal ke Phool",
-  "short_name": "کنول کے پھول",
+  "short_name": "Kunwal",
   "description": "A personal shayari diary — کنول کے پھول",
   "start_url": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FDFAF0",
-  "theme_color": "#4A235A",
+  "background_color": "#F1E7DA",
+  "theme_color": "#8A3F2C",
   "icons": [
-    {
-      "src": "./icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "./icons/icon-192.png",          "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png",          "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "categories": ["lifestyle", "productivity"]
 }
