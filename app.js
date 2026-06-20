@@ -106,7 +106,9 @@ function esc(str) {
 }
 
 function urduHtml(str) {
-  return esc(str).replace(/\n/g, '<br>');
+  return str.split(/\n{2,}/)
+    .map(sher => `<p class="sher-block">${esc(sher).replace(/\n/g, '<br>')}</p>`)
+    .join('');
 }
 
 function fmtDate(iso) {
