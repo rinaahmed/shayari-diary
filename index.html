@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#4A235A">
+  <meta name="theme-color" content="#2D1050">
   <meta name="description" content="A personal shayari diary — کنول کے پھول">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,30 +13,47 @@
   <title>کنول کے پھول — Shayari Diary</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
   <!-- ============ HOME VIEW ============ -->
   <div id="view-home" class="view active">
+
     <header class="app-header">
-      <div class="header-content">
-        <h1 class="app-title">کنول کے پھول</h1>
-        <p class="app-subtitle">Shayari Diary 🌹</p>
+      <div class="app-header-inner">
+        <div>
+          <h1 class="app-title">کنول کے پھول</h1>
+          <p class="app-tagline">Shayari Diary</p>
+        </div>
+        <button class="btn-header-icon" id="settingsBtn" aria-label="Settings" title="Settings">
+          <svg viewBox="0 0 20 20" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="10" cy="10" r="2.5"/>
+            <path d="M10 2v1.6m0 12.8V18m-8-8h1.6m12.8 0H18M4.3 4.3l1.1 1.1m9.2 9.2 1.1 1.1M4.3 15.7l1.1-1.1m9.2-9.2 1.1-1.1"/>
+          </svg>
+        </button>
       </div>
-      <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙</button>
     </header>
 
     <div class="tab-bar">
-      <button class="tab active" data-tab="sher">My Sher</button>
-      <button class="tab" data-tab="ghazal">My Ghazals</button>
-      <button class="tab" data-tab="saved">Saved (Others)</button>
+      <div class="tabs-track">
+        <button class="tab active" data-tab="sher">My Sher</button>
+        <button class="tab" data-tab="ghazal">My Ghazals</button>
+        <button class="tab" data-tab="saved">Saved</button>
+        <div class="tab-ink" id="tabInk"></div>
+      </div>
     </div>
 
     <div class="search-section">
-      <input type="search" id="searchInput" class="search-input"
-             placeholder="Search shayari, tags, author…" autocomplete="off" autocorrect="off">
+      <div class="search-bar">
+        <svg class="search-icon" viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="8.5" cy="8.5" r="5.5"/>
+          <path d="M17 17l-4-4"/>
+        </svg>
+        <input type="search" id="searchInput" class="search-input"
+               placeholder="Search shayari, tags, author…" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
     </div>
 
     <div id="tagFilter" class="tag-filter"></div>
@@ -49,7 +66,12 @@
   <!-- ============ FORM VIEW ============ -->
   <div id="view-form" class="view">
     <header class="sub-header">
-      <button class="back-btn" id="formBackBtn">← Back</button>
+      <button class="back-btn" id="formBackBtn">
+        <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="12 16 6 10 12 4"/>
+        </svg>
+        Back
+      </button>
       <h2 id="formTitle">New Entry</h2>
     </header>
 
@@ -66,11 +88,8 @@
         </div>
 
         <div class="form-group">
-          <label for="fieldTitle" class="form-label">
-            Title <span class="optional">(optional)</span>
-          </label>
-          <input type="text" id="fieldTitle" class="form-input"
-                 placeholder="Name this piece…" autocomplete="off">
+          <label for="fieldTitle" class="form-label">Title <span class="optional">(optional)</span></label>
+          <input type="text" id="fieldTitle" class="form-input" placeholder="Name this piece…" autocomplete="off">
         </div>
 
         <div class="form-group">
@@ -80,53 +99,41 @@
         </div>
 
         <div class="form-group">
-          <label for="fieldEnglish" class="form-label">
-            English Translation <span class="optional">(optional)</span>
-          </label>
-          <textarea id="fieldEnglish" class="form-textarea"
-                    placeholder="Translation or meaning…" rows="3"></textarea>
+          <label for="fieldEnglish" class="form-label">English Translation <span class="optional">(optional)</span></label>
+          <textarea id="fieldEnglish" class="form-textarea" placeholder="Translation or meaning…" rows="3"></textarea>
         </div>
 
         <div class="form-group">
           <label for="fieldAuthor" class="form-label">Author</label>
-          <input type="text" id="fieldAuthor" class="form-input"
-                 placeholder="Kunwal" value="Kunwal" autocomplete="off">
+          <input type="text" id="fieldAuthor" class="form-input" placeholder="Kunwal" value="Kunwal" autocomplete="off">
         </div>
 
         <div class="form-group">
-          <label for="fieldTags" class="form-label">
-            Tags <span class="optional">(comma separated)</span>
-          </label>
-          <input type="text" id="fieldTags" class="form-input"
-                 placeholder="love, longing, spring…" autocomplete="off">
+          <label for="fieldTags" class="form-label">Tags <span class="optional">(comma separated)</span></label>
+          <input type="text" id="fieldTags" class="form-input" placeholder="love, longing, spring…" autocomplete="off">
           <div id="tagSuggestions" class="tag-suggestions"></div>
         </div>
 
         <div class="form-group">
-          <label for="fieldNotes" class="form-label">
-            Personal Notes <span class="optional">(optional)</span>
-          </label>
-          <textarea id="fieldNotes" class="form-textarea"
-                    placeholder="Context, inspiration, variations…" rows="3"></textarea>
+          <label for="fieldNotes" class="form-label">Personal Notes <span class="optional">(optional)</span></label>
+          <textarea id="fieldNotes" class="form-textarea" placeholder="Context, inspiration, variations…" rows="3"></textarea>
         </div>
 
         <!-- ---- Ghazal Progress Section ---- -->
         <div id="ghazalSection" class="ghazal-section hidden">
 
-          <div class="section-divider">Ghazal Structure</div>
+          <div class="section-divider">
+            <span class="section-divider-label">Ghazal Structure</span>
+          </div>
 
           <div class="form-group">
-            <label for="fieldRadif" class="form-label">
-              Radif <span class="urdu-text">ردیف</span>
-            </label>
+            <label for="fieldRadif" class="form-label">Radif <span class="urdu-inline">ردیف</span></label>
             <input type="text" id="fieldRadif" class="form-input urdu-text"
                    placeholder="رہا نہیں گیا…" dir="rtl" autocomplete="off">
           </div>
 
           <div class="form-group">
-            <label class="form-label">
-              Qafia Used <span class="urdu-text">قافیہ</span>
-            </label>
+            <label class="form-label">Qafia Used <span class="urdu-inline">قافیہ</span></label>
             <div class="chip-input-wrapper">
               <input type="text" id="qafiaInput" class="form-input urdu-text"
                      placeholder="Type a word and press Enter…" dir="rtl" autocomplete="off">
@@ -136,11 +143,12 @@
 
           <div class="form-group">
             <label for="fieldSherCount" class="form-label">Current Sher Count</label>
-            <input type="number" id="fieldSherCount" class="form-input"
-                   placeholder="0" min="0" max="99" value="0">
+            <input type="number" id="fieldSherCount" class="form-input" placeholder="0" min="0" max="99" value="0">
           </div>
 
-          <div class="section-divider">Structural Rules</div>
+          <div class="section-divider">
+            <span class="section-divider-label">Structural Rules</span>
+          </div>
           <div class="checklist">
             <label class="checklist-item">
               <input type="checkbox" id="checkMatla">
@@ -164,7 +172,9 @@
             </label>
           </div>
 
-          <div class="section-divider">Quality Rules</div>
+          <div class="section-divider">
+            <span class="section-divider-label">Quality Rules</span>
+          </div>
           <div class="checklist">
             <label class="checklist-item">
               <input type="checkbox" id="checkBehr">
@@ -184,7 +194,7 @@
             </label>
           </div>
 
-          <div class="form-group" style="margin-top:14px">
+          <div class="form-group" style="margin-top:18px">
             <label for="fieldPolishNotes" class="form-label">Polish Notes</label>
             <textarea id="fieldPolishNotes" class="form-textarea"
                       placeholder="Notes on metre, edits, revisions…" rows="3"></textarea>
@@ -201,11 +211,29 @@
   <!-- ============ DETAIL VIEW ============ -->
   <div id="view-detail" class="view">
     <header class="sub-header">
-      <button class="back-btn" id="detailBackBtn">← Back</button>
+      <button class="back-btn" id="detailBackBtn">
+        <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="12 16 6 10 12 4"/>
+        </svg>
+        Back
+      </button>
       <div class="detail-actions">
-        <button class="icon-btn" id="shareBtn"  aria-label="Copy to clipboard" title="Copy">&#9113;</button>
-        <button class="icon-btn" id="editBtn"   aria-label="Edit"   title="Edit">&#9998;</button>
-        <button class="icon-btn danger" id="deleteBtn" aria-label="Delete" title="Delete">&#10005;</button>
+        <button class="btn-action" id="shareBtn" aria-label="Copy to clipboard" title="Copy">
+          <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="7" y="7" width="10" height="10" rx="1.5"/>
+            <path d="M4 13H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v1"/>
+          </svg>
+        </button>
+        <button class="btn-action" id="editBtn" aria-label="Edit" title="Edit">
+          <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 2.5a2.121 2.121 0 0 1 3 3L6 17l-4 1 1-4L14.5 2.5z"/>
+          </svg>
+        </button>
+        <button class="btn-action danger" id="deleteBtn" aria-label="Delete" title="Delete">
+          <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 5h14m-11 0V3h8v2M5 5v13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5M8 9v5m4-5v5"/>
+          </svg>
+        </button>
       </div>
     </header>
     <div id="detailContent" class="detail-content scroll-body"></div>
@@ -214,7 +242,12 @@
   <!-- ============ SETTINGS VIEW ============ -->
   <div id="view-settings" class="view">
     <header class="sub-header">
-      <button class="back-btn" id="settingsBackBtn">← Back</button>
+      <button class="back-btn" id="settingsBackBtn">
+        <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="12 16 6 10 12 4"/>
+        </svg>
+        Back
+      </button>
       <h2>Settings</h2>
     </header>
     <div class="settings-content">
@@ -222,19 +255,19 @@
         <h3>Backup &amp; Restore</h3>
         <button class="btn-secondary" id="exportBtn">Export All Data (JSON)</button>
         <label class="btn-secondary import-label">
-          Import Data (JSON) — merges with existing
+          Import Data (JSON) — merges, never overwrites
           <input type="file" id="importFile" accept=".json" style="display:none">
         </label>
       </div>
-      <div class="settings-section danger-zone">
+      <div class="settings-section">
         <h3>Danger Zone</h3>
         <button class="btn-danger" id="clearDataBtn">Clear All Data</button>
       </div>
       <div class="settings-section">
         <h3>About</h3>
-        <p class="urdu-text" style="font-size:1.2rem;line-height:2.2;text-align:right">کنول کے پھول</p>
+        <p class="settings-about-urdu">کنول کے پھول</p>
         <p>A private shayari diary. No accounts, no tracking, no cloud.</p>
-        <p class="muted">Data lives in your browser's localStorage. Export regularly to back up your work.</p>
+        <p class="muted">Your data lives in this browser's localStorage. Export regularly to keep backups.</p>
       </div>
     </div>
   </div>
@@ -245,6 +278,7 @@
   <!-- ============ CONFIRM DIALOG ============ -->
   <div id="confirmOverlay" class="overlay hidden" role="dialog" aria-modal="true">
     <div class="confirm-dialog">
+      <div class="confirm-handle"></div>
       <p id="confirmMessage"></p>
       <div class="confirm-actions">
         <button class="btn-secondary" id="confirmCancel">Cancel</button>

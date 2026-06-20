@@ -181,6 +181,15 @@ function goBack() {
   navigate(prev, {});
 }
 
+// ── Tab ink indicator ────────────────────────────────────────
+function updateTabInk() {
+  const activeTab = document.querySelector('.tab.active');
+  const ink = document.getElementById('tabInk');
+  if (!activeTab || !ink) return;
+  ink.style.left  = activeTab.offsetLeft + 'px';
+  ink.style.width = activeTab.offsetWidth + 'px';
+}
+
 // ── HOME VIEW ────────────────────────────────────────────────
 function renderHome() {
   renderTagFilter();
@@ -251,10 +260,11 @@ function renderEntryList() {
     const hasAny = state.entries.some(e => e.type === state.activeTab);
     container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-rose">🌹</div>
+        <div class="empty-ornament">🌹</div>
+        <h3>${hasAny ? 'Nothing matches' : 'Start writing'}</h3>
         <p>${hasAny
           ? 'No entries match your search or filter.'
-          : 'No entries yet. Tap + to add your first ' + typeLabel(state.activeTab) + '.'
+          : 'Tap + to add your first ' + typeLabel(state.activeTab) + '.'
         }</p>
       </div>`;
     return;
@@ -267,46 +277,50 @@ function renderEntryList() {
 }
 
 function cardHtml(entry) {
+  const type = entry.type || 'sher';
   const lines = (entry.urdu || '').split('\n').filter(l => l.trim());
-  const previewText = lines.slice(0, 4).join('\n');
-  const more = lines.length > 4 ? `<span style="color:var(--muted);font-size:0.65rem"> …+${lines.length - 4} more lines</span>` : '';
+  const previewText = lines.slice(0, 4).map(esc).join('\n');
+  const moreCount = lines.length - 4;
+
+  const nameHtml = entry.title
+    ? `<span class="card-name">${esc(entry.title)}</span>`
+    : '';
+
+  let progressHtml = '';
+  if (type === 'ghazal' && entry.ghazalProgress) {
+    const gp = entry.ghazalProgress;
+    progressHtml = `
+      <div class="card-progress">
+        <span>${gp.sherCount || 0}/5 sher</span>
+        <span class="${gp.hasMatla ? 'prog-done' : 'prog-pending'}"> · Matla ${gp.hasMatla ? '✓' : '–'}</span>
+        <span class="${gp.hasMaqta ? 'prog-done' : 'prog-pending'}"> · Maqta ${gp.hasMaqta ? '✓' : '–'}</span>
+      </div>`;
+  }
 
   const tagsHtml = (entry.tags && entry.tags.length)
-    ? `<div class="card-tags">${entry.tags.map(t => `<span class="tag-chip">${esc(t)}</span>`).join('')}</div>`
+    ? entry.tags.map(t => `<span class="tag-chip">${esc(t)}</span>`).join('')
     : '';
 
   const authorHtml = (entry.author && entry.author !== 'Kunwal')
     ? `<span class="card-author">${esc(entry.author)}</span>`
     : '';
 
-  const titleHtml = entry.title
-    ? `<div class="card-title">${esc(entry.title)}</div>`
-    : '';
-
-  let progressHtml = '';
-  if (entry.type === 'ghazal' && entry.ghazalProgress) {
-    const gp = entry.ghazalProgress;
-    progressHtml = `
-      <div class="ghazal-progress">
-        <span>${gp.sherCount || 0}/5 sher</span>
-        <span class="${gp.hasMatla ? 'check-yes' : 'check-no'}">Matla ${gp.hasMatla ? '✓' : '✗'}</span>
-        <span class="${gp.hasMaqta ? 'check-yes' : 'check-no'}">Maqta ${gp.hasMaqta ? '✓' : '✗'}</span>
-      </div>`;
-  }
-
   return `
-    <div class="entry-card" data-id="${esc(entry.id)}">
-      ${titleHtml}
-      <div class="urdu-text card-urdu">${urduHtml(previewText)}${more}</div>
-      ${progressHtml}
-      <div class="card-meta">
-        ${tagsHtml}
-        <div class="card-bottom">
-          ${authorHtml}
-          <span class="card-date">${fmtDate(entry.dateAdded)}</span>
-        </div>
+    <article class="entry-card" data-id="${esc(entry.id)}">
+      <div class="card-head">
+        <span class="badge badge-${type}">${typeLabel(type)}</span>
+        ${nameHtml}
       </div>
-    </div>`;
+      <div class="card-urdu urdu-text">${previewText}</div>
+      ${moreCount > 0 ? `<p class="card-more">+${moreCount} more line${moreCount > 1 ? 's' : ''}</p>` : ''}
+      ${progressHtml}
+      <hr class="card-sep">
+      <div class="card-foot">
+        <div class="card-chips">${tagsHtml}</div>
+        ${authorHtml}
+        <span class="card-date">${fmtDate(entry.dateAdded)}</span>
+      </div>
+    </article>`;
 }
 
 // ── FORM VIEW ────────────────────────────────────────────────
@@ -454,40 +468,50 @@ function renderDetail(id) {
   if (!entry) { navigate('home'); return; }
 
   const container = document.getElementById('detailContent');
+  const type = entry.type || 'sher';
 
   const tagsHtml = (entry.tags && entry.tags.length)
     ? `<div class="detail-tags">${entry.tags.map(t => `<span class="tag-chip">${esc(t)}</span>`).join('')}</div>`
     : '';
 
   let ghazalHtml = '';
-  if (entry.type === 'ghazal' && entry.ghazalProgress) {
+  if (type === 'ghazal' && entry.ghazalProgress) {
     const gp = entry.ghazalProgress;
     const checks = [
-      { label: 'Matla',        done: gp.hasMatla },
-      { label: 'Maqta',        done: gp.hasMaqta },
+      { label: 'Matla',         done: gp.hasMatla },
+      { label: 'Maqta',         done: gp.hasMaqta },
       { label: `${gp.sherCount || 0} sher`, done: (gp.sherCount || 0) >= 5 },
-      { label: 'Behr',         done: gp.behrPolished }
+      { label: 'Behr polished', done: gp.behrPolished },
+      { label: 'Radif all',     done: gp.radifAll },
+      { label: 'Unique qafia',  done: gp.uniqueQafia },
+      { label: 'No repeat',     done: gp.noRepeat },
+      { label: 'Strong image',  done: gp.strongImage },
+      { label: 'Stands alone',  done: gp.standsAlone }
     ];
     ghazalHtml = `
       <div class="detail-ghazal-progress">
-        <h4>Ghazal Progress</h4>
+        <p class="ghazal-progress-title">Ghazal Progress</p>
         <div class="progress-grid">
           ${checks.map(c => `<div class="progress-item${c.done ? ' done' : ''}">${c.label} ${c.done ? '✓' : '–'}</div>`).join('')}
         </div>
-        ${gp.radif ? `<div class="progress-detail"><strong>Radif:</strong><span class="urdu-text">${esc(gp.radif)}</span></div>` : ''}
-        ${(gp.qafiaUsed && gp.qafiaUsed.length) ? `<div class="progress-detail"><strong>Qafia:</strong>${gp.qafiaUsed.map(q => `<span class="tag-chip urdu-text">${esc(q)}</span>`).join('')}</div>` : ''}
-        ${gp.notes ? `<div class="progress-detail" style="display:block"><strong>Notes:</strong> ${esc(gp.notes)}</div>` : ''}
+        ${gp.radif ? `<div class="progress-detail"><strong>Radif</strong> <span class="urdu-text">${esc(gp.radif)}</span></div>` : ''}
+        ${(gp.qafiaUsed && gp.qafiaUsed.length) ? `<div class="progress-detail"><strong>Qafia</strong> ${gp.qafiaUsed.map(q => `<span class="tag-chip urdu-text">${esc(q)}</span>`).join('')}</div>` : ''}
+        ${gp.notes ? `<div class="progress-detail" style="display:block"><strong>Polish notes</strong><br>${esc(gp.notes)}</div>` : ''}
       </div>`;
   }
 
   container.innerHTML = `
     <div class="detail-inner">
-      ${entry.title ? `<div class="detail-title urdu-text">${esc(entry.title)}</div>` : ''}
-      <div class="detail-type-badge">${typeLabel(entry.type)}</div>
-      <div class="detail-urdu urdu-text">${urduHtml(entry.urdu)}</div>
-      ${entry.english ? `<div class="detail-english">${esc(entry.english)}</div>` : ''}
+      <div class="detail-header-row">
+        <span class="detail-badge detail-badge-${type}">${typeLabel(type)}</span>
+        ${entry.title ? `<span class="detail-title-urdu">${esc(entry.title)}</span>` : ''}
+      </div>
+      <div class="detail-poetry">
+        <div class="detail-urdu urdu-text">${urduHtml(entry.urdu)}</div>
+        ${entry.english ? `<div class="detail-english">${esc(entry.english)}</div>` : ''}
+      </div>
       <div class="detail-byline">
-        <span class="detail-author">${esc(entry.author || 'Kunwal')}</span>
+        <span class="detail-author">— ${esc(entry.author || 'Kunwal')}</span>
         <span class="detail-date">${fmtDateLong(entry.dateAdded)}</span>
       </div>
       ${tagsHtml}
@@ -617,6 +641,7 @@ function bindEvents() {
       tab.classList.add('active');
       state.activeTab = tab.dataset.tab;
       state.selectedTags.clear();
+      updateTabInk();
       renderHome();
     });
   });
@@ -797,6 +822,7 @@ function init() {
   loadData();
   bindEvents();
   renderHome();
+  requestAnimationFrame(updateTabInk);
   registerSW();
 
   // Push initial history state
