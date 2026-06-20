@@ -397,6 +397,8 @@ function renderForm(id) {
   document.getElementById('tagSuggestions').innerHTML = '';
 
   document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('fieldDateRow').classList.add('hidden');
+
   if (!id) {
     document.querySelector('.type-btn[data-type="sher"]').classList.add('active');
   }
@@ -436,6 +438,13 @@ function renderForm(id) {
     if (entry.type === 'saved') {
       document.getElementById('fieldAuthor').value = entry.author || '';
     }
+
+    // Date field — edit mode only
+    const dateRow = document.getElementById('fieldDateRow');
+    dateRow.classList.remove('hidden');
+    const d = new Date(entry.dateAdded);
+    document.getElementById('fieldDate').value = isNaN(d)
+      ? '' : d.toISOString().slice(0, 10);
   }
 
   renderTagSuggestions();
@@ -541,11 +550,14 @@ function saveEntry() {
   if (state.editingId) {
     const idx = state.entries.findIndex(e => e.id === state.editingId);
     if (idx !== -1) {
+      const dateVal = document.getElementById('fieldDate').value; // YYYY-MM-DD or ''
+      const newDate = dateVal ? new Date(dateVal + 'T12:00:00').toISOString()
+                              : state.entries[idx].dateAdded;
       state.entries[idx] = {
         ...state.entries[idx],
         ...data,
         id: state.editingId,
-        dateAdded: state.entries[idx].dateAdded
+        dateAdded: newDate
       };
     }
     saveData();
