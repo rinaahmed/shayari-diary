@@ -310,9 +310,10 @@ body {
   -webkit-tap-highlight-color: transparent;
   box-shadow: var(--elev-1);
   position: relative;
-  overflow: hidden;
+  /* overflow:hidden removed — iOS Safari freezes flex-item height when
+     overflow:hidden is set, clipping Nastaliq ink and the card footer */
 }
-/* inset border instead of outline to avoid layout shift */
+/* inset border via outline so the card can stay overflow:visible */
 .entry-card::after {
   content: '';
   position: absolute; inset: 0;
@@ -381,7 +382,7 @@ body {
 .card-urdu {
   font-family: var(--font-urdu);
   font-size: 1rem;
-  line-height: 2.2;
+  /* no line-height — Nastaliq natural metrics are 3.1× font-size; constraining it clips ink */
   color: var(--plum-800);
   direction: rtl;
   text-align: right;
