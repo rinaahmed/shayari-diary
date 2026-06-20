@@ -279,8 +279,8 @@ function renderEntryList() {
 function cardHtml(entry) {
   const type = entry.type || 'sher';
   const lines = (entry.urdu || '').split('\n').filter(l => l.trim());
-  const previewText = lines.slice(0, 4).map(esc).join('<br>');
-  const moreCount = lines.length - 4;
+  const previewText = lines.slice(0, 2).map(esc).join('<br>');
+  const moreCount = lines.length - 2;
 
   const nameHtml = entry.title
     ? `<span class="card-name">${esc(entry.title)}</span>`

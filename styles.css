@@ -380,12 +380,12 @@ body {
 
 .card-urdu {
   font-family: var(--font-urdu);
-  font-size: 1.5rem;
-  line-height: 2.65;
+  font-size: 1rem;
+  line-height: 2.2;
   color: var(--plum-800);
   direction: rtl;
   text-align: right;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .card-more {
   font-family: var(--font-ui);
