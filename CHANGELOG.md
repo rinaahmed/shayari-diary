@@ -2,6 +2,13 @@
 
 All notable changes to کنول کے پھول will be documented here.
 
+## [2.1.0] — 2026-06-20
+
+### Added — Data safety
+- **Undo on delete**: deleting an entry now shows a 4-second "Undo" action toast; the deletion is only committed to localStorage after the window closes, so tapping Undo fully restores the entry in place
+- **Backup reminder**: a counter in localStorage tracks new entries added since the last export; every 5 new entries a "Back up your diary? Export" toast appears 3 seconds after saving, with a one-tap Export button that triggers the download and resets the counter
+- Toast upgraded to support optional action buttons (gold label, tappable when visible)
+
 ## [2.0.6] — 2026-06-20
 
 ### Changed — Rename "Saved" tab to "Mehfil"

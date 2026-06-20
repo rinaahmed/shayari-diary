@@ -5,7 +5,8 @@
 'use strict';
 
 // ── Storage key ──────────────────────────────────────────────
-const STORAGE_KEY = 'kunwal_entries';
+const STORAGE_KEY  = 'kunwal_entries';
+const BACKUP_KEY   = 'kunwal_backup_count';
 
 // ── Default seed data: saved poems by other poets only.
 //    Kunwal's own shayari will be imported via the Import feature.
@@ -536,6 +537,7 @@ function exportData() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+  localStorage.setItem(BACKUP_KEY, '0');
   showToast('Data exported successfully.');
 }
 
@@ -580,11 +582,30 @@ function importData(file) {
 // ── TOAST ────────────────────────────────────────────────────
 let toastTimer = null;
 function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
+  const el  = document.getElementById('toast');
+  const btn = document.getElementById('toastAction');
+  document.getElementById('toastMsg').textContent = msg;
+  btn.classList.add('hidden');
+  el.classList.remove('has-action');
   el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function showActionToast(msg, btnLabel, onAction, duration = 4200) {
+  const el  = document.getElementById('toast');
+  const btn = document.getElementById('toastAction');
+  document.getElementById('toastMsg').textContent = msg;
+  btn.textContent = btnLabel;
+  btn.classList.remove('hidden');
+  btn.onclick = () => {
+    clearTimeout(toastTimer);
+    el.classList.remove('show', 'has-action');
+    onAction();
+  };
+  el.classList.add('show', 'has-action');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show', 'has-action'), duration);
 }
 
 // ── CONFIRM DIALOG ───────────────────────────────────────────
@@ -747,6 +768,12 @@ function bindEvents() {
       saveData();
       showToast('Entry saved. 🌹');
       navigate('home');
+
+      const count = (parseInt(localStorage.getItem(BACKUP_KEY) || '0', 10)) + 1;
+      localStorage.setItem(BACKUP_KEY, String(count));
+      if (count % 5 === 0) {
+        setTimeout(() => showActionToast('Back up your diary?', 'Export', exportData, 6000), 3200);
+      }
     }
   });
 
@@ -760,11 +787,21 @@ function bindEvents() {
 
   // ── Detail: delete
   document.getElementById('deleteBtn').addEventListener('click', () => {
-    confirm('Delete this entry? This cannot be undone.', () => {
-      state.entries = state.entries.filter(e => e.id !== state.viewingId);
-      saveData();
-      showToast('Entry deleted.');
+    confirm('Delete this entry?', () => {
+      const id  = state.viewingId;
+      const idx = state.entries.findIndex(e => e.id === id);
+      const deleted = { ...state.entries[idx] };
+      state.entries.splice(idx, 1);
       navigate('home');
+
+      let committed = false;
+      showActionToast('Entry deleted.', 'Undo', () => {
+        state.entries.splice(idx, 0, deleted);
+        saveData();
+        renderHome();
+        committed = true;
+      });
+      setTimeout(() => { if (!committed) saveData(); }, 4700);
     });
   });
 
