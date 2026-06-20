@@ -813,7 +813,7 @@ function bindEvents() {
 // ── SERVICE WORKER ───────────────────────────────────────────
 function registerSW() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => {
+    navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).catch(() => {
       // Offline functionality unavailable — non-fatal
     });
   }

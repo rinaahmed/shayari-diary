@@ -2,6 +2,12 @@
 
 All notable changes to کنول کے پھول will be documented here.
 
+## [2.0.3] — 2026-06-20
+
+### Fixed — Service worker update detection
+- Added `{ updateViaCache: 'none' }` to SW registration — bypasses browser HTTP cache when checking for a new `sw.js`, so updates are detected on every app open instead of after GitHub Pages' 10-minute cache window
+- Bumped service worker to `v6`
+
 ## [2.0.2] — 2026-06-20
 
 ### Changed — Detail page refinement
