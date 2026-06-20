@@ -2,6 +2,13 @@
 
 All notable changes to کنول کے پھول will be documented here.
 
+## [2.0.6] — 2026-06-20
+
+### Changed — Rename "Saved" tab to "Mehfil"
+- Tab label, form type button, card badge, detail badge, and empty state all updated
+- Internal data type value `'saved'` unchanged — no existing entries affected
+- Bumped service worker to `v9`
+
 ## [2.0.5] — 2026-06-20
 
 ### Fixed — "Minimum 5 sher" checkbox was editable but silently ignored
