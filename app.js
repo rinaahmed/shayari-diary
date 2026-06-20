@@ -654,19 +654,32 @@ function renderInsights() {
     .map(e => new Date(e.dateAdded)).filter(d => !isNaN(d));
   const firstOwnDate = ownDates.length ? new Date(Math.min(...ownDates)) : null;
 
-  // Monthly histogram — current calendar year Jan–Dec
+  // Monthly histogram — rolling 12 months ending at newest entry (or today)
   const MONTHS_ABBR = ['J','F','M','A','M','J','J','A','S','O','N','D'];
   const CHART_H = 68;
-  const year = now.getFullYear();
+  const allDates = state.entries.map(e => new Date(e.dateAdded)).filter(d => !isNaN(d));
+  const newestDate = allDates.length ? new Date(Math.max(...allDates)) : null;
+  const refDate = newestDate && newestDate < now ? newestDate : now;
 
   const monthlyCounts = Array(12).fill(0);
   state.entries.forEach(e => {
     const d = new Date(e.dateAdded);
-    if (d.getFullYear() === year) {
-      monthlyCounts[d.getMonth()]++;
+    const monthsAgo = (refDate.getFullYear() - d.getFullYear()) * 12
+                    + (refDate.getMonth()    - d.getMonth());
+    if (monthsAgo >= 0 && monthsAgo < 12) {
+      monthlyCounts[11 - monthsAgo]++;
     }
   });
-  const monthLabels = MONTHS_ABBR.slice();
+  const monthLabels = [];
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1);
+    monthLabels.push(MONTHS_ABBR[d.getMonth()]);
+  }
+  // Chart title shows the year(s) covered by the window
+  const windowStart = new Date(refDate.getFullYear(), refDate.getMonth() - 11, 1);
+  const chartTitle = windowStart.getFullYear() === refDate.getFullYear()
+    ? `Writing in ${refDate.getFullYear()}`
+    : `Writing ${windowStart.getFullYear()}–${refDate.getFullYear()}`;
   const maxCount = Math.max(...monthlyCounts, 1);
   const chartBarsHtml = monthlyCounts.map((c, i) => {
     const h = c === 0 ? 3 : Math.max(6, Math.round((c / maxCount) * CHART_H));
@@ -721,7 +734,7 @@ function renderInsights() {
     </div>
 
     <div class="chart-section">
-      <p class="chart-section-title">This year's writing</p>
+      <p class="chart-section-title">${chartTitle}</p>
       <div class="chart-bars">${chartBarsHtml}</div>
     </div>
 
