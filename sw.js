@@ -1,4 +1,4 @@
-const CACHE = 'kunwal-ke-phool-v7';
+const CACHE = 'kunwal-ke-phool-v8';
 const ASSETS = [
   './',
   './index.html',

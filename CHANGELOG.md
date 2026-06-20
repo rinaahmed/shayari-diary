@@ -2,6 +2,16 @@
 
 All notable changes to کنول کے پھول will be documented here.
 
+## [2.0.5] — 2026-06-20
+
+### Fixed — "Minimum 5 sher" checkbox was editable but silently ignored
+- `checkMin5` is computed from the sher count, not a manual input — its checked state was never read by `collectFormData()`
+- Added `disabled` attribute so it can't be toggled manually
+- Styled with gold fill when checked (vs. plum for manual checkboxes) to visually signal it's auto-computed
+- Wired to `fieldSherCount` input event so it updates live as the count is typed
+- Added `(auto)` label suffix for clarity
+- Bumped service worker to `v8`
+
 ## [2.0.4] — 2026-06-20
 
 ### Fixed — Editing a ghazal converted it to a sher
