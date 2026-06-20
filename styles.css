@@ -714,6 +714,21 @@ body {
   border-left: none;
   transform: rotate(45deg);
 }
+/* Computed / auto checkbox — gold fill, no pointer */
+.checklist-item input[type="checkbox"]:disabled {
+  cursor: default;
+  border-color: var(--border-gold);
+  background: var(--surface-2);
+  box-shadow: none;
+}
+.checklist-item input[type="checkbox"]:disabled:checked {
+  background: var(--gold-500);
+  border-color: var(--gold-400);
+}
+.checklist-item:has(input[type="checkbox"]:disabled) {
+  cursor: default;
+  color: var(--ink-3);
+}
 
 /* Qafia chips */
 .chip-input-wrapper { display: flex; flex-direction: column; gap: 8px; }

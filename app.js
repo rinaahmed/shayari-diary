@@ -690,6 +690,11 @@ function bindEvents() {
     });
   });
 
+  // ── Form: sher count drives the computed checkMin5
+  document.getElementById('fieldSherCount').addEventListener('input', e => {
+    document.getElementById('checkMin5').checked = parseInt(e.target.value, 10) >= 5;
+  });
+
   // ── Form: qafia chip input
   document.getElementById('qafiaInput').addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ',') {
