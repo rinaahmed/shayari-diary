@@ -1080,9 +1080,9 @@ body {
 }
 .chart-bars {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-end; /* bars grow from bottom; each col sized to content */
   gap: 4px;
-  height: 80px;
+  height: 88px; /* bar area (68px max bar) + label (~16px) + gap (4px) */
 }
 .chart-col {
   flex: 1;
@@ -1090,14 +1090,13 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  height: 100%;
-  justify-content: flex-end;
+  /* no height:100% — align-items:flex-end on parent handles alignment */
 }
 .chart-bar {
   width: 100%;
   border-radius: 3px 3px 0 0;
-  min-height: 4px;
-  transition: height .4s ease;
+  min-height: 3px;
+  /* height is set inline in pixels from JS */
 }
 .chart-bar.peak { background: var(--terracotta); }
 .chart-bar.mid  { background: #D6A98C; }

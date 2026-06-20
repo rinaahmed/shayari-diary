@@ -647,29 +647,39 @@ function renderInsights() {
   const ghazalCount = state.entries.filter(e => e.type === 'ghazal').length;
   const mehfilCount = state.entries.filter(e => e.type === 'saved').length;
 
-  // Monthly histogram (last 12 months)
-  const months = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+  // Compute date bounds up-front — used by both chart and closing section
+  const dates = state.entries.map(e => new Date(e.dateAdded)).filter(d => !isNaN(d));
+  const firstDate  = dates.length ? new Date(Math.min(...dates)) : null;
+  const newestDate = dates.length ? new Date(Math.max(...dates)) : null;
+
+  // Monthly histogram — 12 months ending at the newest entry date
+  // (anchored to data, not today, so seed/imported entries always appear)
+  const MONTHS_ABBR = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+  const CHART_H = 68; // max bar height in pixels
   const now = new Date();
+  const refDate = newestDate && newestDate > now ? newestDate : (newestDate || now);
+
   const monthlyCounts = Array(12).fill(0);
   state.entries.forEach(e => {
     const d = new Date(e.dateAdded);
-    const monthsAgo = (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
+    const monthsAgo = (refDate.getFullYear() - d.getFullYear()) * 12
+                    + (refDate.getMonth()    - d.getMonth());
     if (monthsAgo >= 0 && monthsAgo < 12) {
       monthlyCounts[11 - monthsAgo]++;
     }
   });
   const monthLabels = [];
   for (let i = 11; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    monthLabels.push(months[d.getMonth()]);
+    const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1);
+    monthLabels.push(MONTHS_ABBR[d.getMonth()]);
   }
   const maxCount = Math.max(...monthlyCounts, 1);
   const chartBarsHtml = monthlyCounts.map((c, i) => {
-    const pct = Math.round((c / maxCount) * 100);
+    const h = c === 0 ? 3 : Math.max(6, Math.round((c / maxCount) * CHART_H));
     const cls = c === maxCount ? 'peak' : c >= maxCount * 0.5 ? 'mid' : 'low';
     return `
       <div class="chart-col">
-        <div class="chart-bar ${cls}" style="height:${Math.max(pct, 5)}%"></div>
+        <div class="chart-bar ${cls}" style="height:${h}px"></div>
         <span class="chart-month">${monthLabels[i]}</span>
       </div>`;
   }).join('');
@@ -691,10 +701,6 @@ function renderInsights() {
           <span class="theme-bar-count">${cnt}</span>
         </div>`).join('')
     : '<p style="font-size:.82rem;color:var(--muted);padding:4px 0">No themes yet.</p>';
-
-  // First entry date
-  const dates = state.entries.map(e => new Date(e.dateAdded)).filter(d => !isNaN(d));
-  const firstDate = dates.length ? new Date(Math.min(...dates)) : null;
 
   // Favourite line — most recently added sher or saved
   const favEntry = state.entries
