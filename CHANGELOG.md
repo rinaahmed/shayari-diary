@@ -2,6 +2,15 @@
 
 All notable changes to کنول کے پھول will be documented here.
 
+## [2.0.2] — 2026-06-20
+
+### Changed — Detail page refinement
+- Poetry block redesigned as a white card (matching list card surface, shadow, border-radius, gold border) for visual consistency
+- `.detail-urdu` font-size reduced from 1.75rem to 1.25rem — fits more poem on screen without scrolling
+- Removed `line-height: 2.85` constraint — Nastaliq uses its natural ~3.1× metrics
+- `urduHtml()` now wraps each sher in `<p class="sher-block">` instead of `<br><br>` separators — sher gap is a compact `1.5rem` instead of a full Nastaliq line-height
+- Bumped service worker to `v5`
+
 ## [2.0.1] — 2026-06-20
 
 ### Fixed — Card rendering on iOS Safari

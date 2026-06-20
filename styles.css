@@ -822,19 +822,27 @@ body {
 
 /* Main poetry block */
 .detail-poetry {
-  padding: 28px 0;
-  border-top: 1px solid var(--border-gold);
-  border-bottom: 1px solid var(--border-gold);
+  background: var(--surface);
+  border-radius: var(--r-l);
+  box-shadow: var(--elev-1);
+  border: 1px solid var(--border-gold);
+  padding: 24px 20px;
   margin-bottom: 24px;
 }
 .detail-urdu {
   font-family: var(--font-urdu);
-  font-size: 1.75rem;
-  line-height: 2.85;
+  font-size: 1.25rem;
+  /* no line-height — Nastaliq natural metrics (~3.1×) */
   color: var(--plum-800);
   direction: rtl;
   text-align: right;
-  white-space: pre-line;
+}
+.sher-block {
+  margin: 0;
+  padding: 0;
+}
+.sher-block + .sher-block {
+  margin-top: 1.5rem;
 }
 
 .detail-english {
