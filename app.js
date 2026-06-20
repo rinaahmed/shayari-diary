@@ -338,7 +338,9 @@ function renderForm(id) {
   document.getElementById('tagSuggestions').innerHTML = '';
 
   document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.type-btn[data-type="sher"]').classList.add('active');
+  if (!id) {
+    document.querySelector('.type-btn[data-type="sher"]').classList.add('active');
+  }
 
   if (id) {
     const entry = state.entries.find(e => e.id === id);

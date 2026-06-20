@@ -2,6 +2,14 @@
 
 All notable changes to کنول کے پھول will be documented here.
 
+## [2.0.4] — 2026-06-20
+
+### Fixed — Editing a ghazal converted it to a sher
+- `renderForm()` set the Sher type button as active by default (for new entries), then also set the entry's actual type active when editing — leaving both Sher and Ghazal buttons with `.active`
+- `collectFormData()` uses `querySelector('.type-btn.active')` which returns the first DOM match (always Sher), so every saved edit overwrote the type with `'sher'` and wiped `ghazalProgress`
+- Fix: the Sher default is now only set when creating a new entry (`if (!id)`)
+- Bumped service worker to `v7`
+
 ## [2.0.3] — 2026-06-20
 
 ### Fixed — Service worker update detection
