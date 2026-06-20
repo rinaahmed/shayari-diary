@@ -87,7 +87,7 @@ const DEFAULT_ENTRIES = [
 const DEFAULT_SETTINGS = {
   nastaliqScale: 100,
   showTranslit: true,
-  dailyReminder: true,
+
   appLock: false
 };
 
@@ -773,7 +773,7 @@ function renderSettings() {
   updateSliderGradient(slider);
 
   document.getElementById('toggleTranslit').checked  = s.showTranslit;
-  document.getElementById('toggleReminder').checked  = s.dailyReminder;
+
   document.getElementById('toggleAppLock').checked   = s.appLock;
 }
 
@@ -1079,10 +1079,6 @@ function bindEvents() {
   // Settings: toggles
   document.getElementById('toggleTranslit').addEventListener('change', e => {
     state.settings.showTranslit = e.target.checked;
-    saveSettings();
-  });
-  document.getElementById('toggleReminder').addEventListener('change', e => {
-    state.settings.dailyReminder = e.target.checked;
     saveSettings();
   });
   document.getElementById('toggleAppLock').addEventListener('change', e => {
