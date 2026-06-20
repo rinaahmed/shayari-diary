@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#4A235A">
+  <meta name="description" content="A personal shayari diary — کنول کے پھول">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="کنول کے پھول">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="manifest" href="./manifest.json">
+  <title>کنول کے پھول — Shayari Diary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- ============ HOME VIEW ============ -->
+  <div id="view-home" class="view active">
+    <header class="app-header">
+      <div class="header-content">
+        <h1 class="app-title">کنول کے پھول</h1>
+        <p class="app-subtitle">Shayari Diary 🌹</p>
+      </div>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙</button>
+    </header>
+
+    <div class="tab-bar">
+      <button class="tab active" data-tab="sher">My Sher</button>
+      <button class="tab" data-tab="ghazal">My Ghazals</button>
+      <button class="tab" data-tab="saved">Saved (Others)</button>
+    </div>
+
+    <div class="search-section">
+      <input type="search" id="searchInput" class="search-input"
+             placeholder="Search shayari, tags, author…" autocomplete="off" autocorrect="off">
+    </div>
+
+    <div id="tagFilter" class="tag-filter"></div>
+
+    <div id="entryList" class="entry-list scroll-body"></div>
+
+    <button class="fab" id="addBtn" aria-label="Add new entry">+</button>
+  </div>
+
+  <!-- ============ FORM VIEW ============ -->
+  <div id="view-form" class="view">
+    <header class="sub-header">
+      <button class="back-btn" id="formBackBtn">← Back</button>
+      <h2 id="formTitle">New Entry</h2>
+    </header>
+
+    <div class="form-container">
+      <form id="entryForm" novalidate>
+
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <div class="type-selector">
+            <button type="button" class="type-btn active" data-type="sher">Sher</button>
+            <button type="button" class="type-btn" data-type="ghazal">Ghazal in Progress</button>
+            <button type="button" class="type-btn" data-type="saved">Saved (Others)</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fieldTitle" class="form-label">
+            Title <span class="optional">(optional)</span>
+          </label>
+          <input type="text" id="fieldTitle" class="form-input"
+                 placeholder="Name this piece…" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label for="fieldUrdu" class="form-label">Urdu Text</label>
+          <textarea id="fieldUrdu" class="form-textarea urdu-input"
+                    placeholder="یہاں لکھیں…" rows="6" dir="rtl" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="fieldEnglish" class="form-label">
+            English Translation <span class="optional">(optional)</span>
+          </label>
+          <textarea id="fieldEnglish" class="form-textarea"
+                    placeholder="Translation or meaning…" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="fieldAuthor" class="form-label">Author</label>
+          <input type="text" id="fieldAuthor" class="form-input"
+                 placeholder="Kunwal" value="Kunwal" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label for="fieldTags" class="form-label">
+            Tags <span class="optional">(comma separated)</span>
+          </label>
+          <input type="text" id="fieldTags" class="form-input"
+                 placeholder="love, longing, spring…" autocomplete="off">
+          <div id="tagSuggestions" class="tag-suggestions"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="fieldNotes" class="form-label">
+            Personal Notes <span class="optional">(optional)</span>
+          </label>
+          <textarea id="fieldNotes" class="form-textarea"
+                    placeholder="Context, inspiration, variations…" rows="3"></textarea>
+        </div>
+
+        <!-- ---- Ghazal Progress Section ---- -->
+        <div id="ghazalSection" class="ghazal-section hidden">
+
+          <div class="section-divider">Ghazal Structure</div>
+
+          <div class="form-group">
+            <label for="fieldRadif" class="form-label">
+              Radif <span class="urdu-text">ردیف</span>
+            </label>
+            <input type="text" id="fieldRadif" class="form-input urdu-text"
+                   placeholder="رہا نہیں گیا…" dir="rtl" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Qafia Used <span class="urdu-text">قافیہ</span>
+            </label>
+            <div class="chip-input-wrapper">
+              <input type="text" id="qafiaInput" class="form-input urdu-text"
+                     placeholder="Type a word and press Enter…" dir="rtl" autocomplete="off">
+              <div id="qafiaChips" class="chip-list"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fieldSherCount" class="form-label">Current Sher Count</label>
+            <input type="number" id="fieldSherCount" class="form-input"
+                   placeholder="0" min="0" max="99" value="0">
+          </div>
+
+          <div class="section-divider">Structural Rules</div>
+          <div class="checklist">
+            <label class="checklist-item">
+              <input type="checkbox" id="checkMatla">
+              <span>Has a matla (both lines of first sher end in radif)</span>
+            </label>
+            <label class="checklist-item">
+              <input type="checkbox" id="checkMaqta">
+              <span>Has a maqta (last sher contains takhallus کنول)</span>
+            </label>
+            <label class="checklist-item">
+              <input type="checkbox" id="checkMin5">
+              <span>Minimum 5 sher</span>
+            </label>
+            <label class="checklist-item">
+              <input type="checkbox" id="checkRadifAll">
+              <span>All sher end second line in radif</span>
+            </label>
+            <label class="checklist-item">
+              <input type="checkbox" id="checkUniqueQafia">
+              <span>Each sher has a unique qafia before the radif</span>
+            </label>
+          </div>
+
+          <div class="section-divider">Quality Rules</div>
+          <div class="checklist">
+            <label class="checklist-item">
+              <input type="checkbox" id="checkBehr">
+              <span>Behr (metre) scanned and polished</span>
+            </label>
+            <label class="checklist-item">
+              <input type="checkbox" id="checkNoRepeat">
+              <span>No repeated key words across sher</span>
+            </label>
+            <label class="checklist-item">
+              <input type="checkbox" id="checkStrongImage">
+              <span>Each sher carries a strong image</span>
+            </label>
+            <label class="checklist-item">
+              <input type="checkbox" id="checkStandsAlone">
+              <span>Each sher can stand alone</span>
+            </label>
+          </div>
+
+          <div class="form-group" style="margin-top:14px">
+            <label for="fieldPolishNotes" class="form-label">Polish Notes</label>
+            <textarea id="fieldPolishNotes" class="form-textarea"
+                      placeholder="Notes on metre, edits, revisions…" rows="3"></textarea>
+          </div>
+
+        </div><!-- /ghazalSection -->
+
+        <button type="submit" class="btn-primary" id="saveBtn">Save Entry</button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ DETAIL VIEW ============ -->
+  <div id="view-detail" class="view">
+    <header class="sub-header">
+      <button class="back-btn" id="detailBackBtn">← Back</button>
+      <div class="detail-actions">
+        <button class="icon-btn" id="shareBtn"  aria-label="Copy to clipboard" title="Copy">&#9113;</button>
+        <button class="icon-btn" id="editBtn"   aria-label="Edit"   title="Edit">&#9998;</button>
+        <button class="icon-btn danger" id="deleteBtn" aria-label="Delete" title="Delete">&#10005;</button>
+      </div>
+    </header>
+    <div id="detailContent" class="detail-content scroll-body"></div>
+  </div>
+
+  <!-- ============ SETTINGS VIEW ============ -->
+  <div id="view-settings" class="view">
+    <header class="sub-header">
+      <button class="back-btn" id="settingsBackBtn">← Back</button>
+      <h2>Settings</h2>
+    </header>
+    <div class="settings-content">
+      <div class="settings-section">
+        <h3>Backup &amp; Restore</h3>
+        <button class="btn-secondary" id="exportBtn">Export All Data (JSON)</button>
+        <label class="btn-secondary import-label">
+          Import Data (JSON) — merges with existing
+          <input type="file" id="importFile" accept=".json" style="display:none">
+        </label>
+      </div>
+      <div class="settings-section danger-zone">
+        <h3>Danger Zone</h3>
+        <button class="btn-danger" id="clearDataBtn">Clear All Data</button>
+      </div>
+      <div class="settings-section">
+        <h3>About</h3>
+        <p class="urdu-text" style="font-size:1.2rem;line-height:2.2;text-align:right">کنول کے پھول</p>
+        <p>A private shayari diary. No accounts, no tracking, no cloud.</p>
+        <p class="muted">Data lives in your browser's localStorage. Export regularly to back up your work.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <!-- ============ CONFIRM DIALOG ============ -->
+  <div id="confirmOverlay" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="confirm-dialog">
+      <p id="confirmMessage"></p>
+      <div class="confirm-actions">
+        <button class="btn-secondary" id="confirmCancel">Cancel</button>
+        <button class="btn-danger"    id="confirmOk">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
