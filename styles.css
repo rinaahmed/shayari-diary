@@ -1022,7 +1022,24 @@ body {
   text-align: center;
   box-shadow: var(--elev-3);
   border: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
+.toast.has-action { pointer-events: auto; }
+.toast-action {
+  background: none;
+  border: none;
+  color: var(--gold-300);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-left: 10px;
+  padding: 0;
+  cursor: pointer;
+}
+.toast-action.hidden { display: none; }
 .toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
