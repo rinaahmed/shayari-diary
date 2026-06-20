@@ -124,7 +124,7 @@ function fmtDateLong(iso) {
 }
 
 function typeLabel(type) {
-  return { sher: 'Sher', ghazal: 'Ghazal', saved: 'Saved' }[type] || type;
+  return { sher: 'Sher', ghazal: 'Ghazal', saved: 'Mehfil' }[type] || type;
 }
 
 // ── Storage ──────────────────────────────────────────────────
