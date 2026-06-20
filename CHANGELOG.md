@@ -2,6 +2,13 @@
 
 All notable changes to کنول کے پھول will be documented here.
 
+## [2.0.1] — 2026-06-20
+
+### Fixed — Card rendering on iOS Safari
+- Removed `overflow: hidden` from `.entry-card` — iOS Safari freezes flex-item height when this is set, collapsing cards to zero height
+- Removed explicit `line-height: 2.2` from `.card-urdu` — Noto Nastaliq Urdu has a natural line height of ~3.1× font-size; constraining it lower causes glyph ink to overflow the line box and get clipped
+- Bumped service worker cache to `v4` to force all devices to fetch fresh files
+
 ## [2.0.0] — 2026-06-20
 
 ### Changed — Design overhaul (v2)
